@@ -3,7 +3,7 @@ import Add from "../img/app/addAvatar.png";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc,getDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
@@ -18,6 +18,7 @@ const Register = () => {
         const email = e.target[1].value;
         const password = e.target[2].value;
         const file = e.target[3].files[0];
+        const res = await createUserWithEmailAndPassword(auth, email, password);
 
         try {
         //Create user
@@ -36,6 +37,7 @@ const Register = () => {
                 photoURL: downloadURL,
                 });
                 //create user on firestore
+
                 await setDoc(doc(db, "users", res.user.uid), {
                 uid: res.user.uid,
                 displayName,
@@ -58,7 +60,6 @@ const Register = () => {
         setLoading(false);
         }
     };
-
     return (
         <div className="formContainer">
         <div className="formWrapper">
@@ -78,7 +79,7 @@ const Register = () => {
             {err && <span>Something went wrong</span>}
             </form>
             <p>
-            You do have an account? <Link to="/register">Login</Link>
+            You do have an account? <Link to="/login">Login</Link>
             </p>
         </div>
         </div>
