@@ -54,7 +54,18 @@ const Register = () => {
             });
         });
         } catch (err) {
-        setErr(true);
+            if (err.code == "auth/email-already-in-use") {
+                alert("The email address is already in use");
+            
+            } else if (err.code == "auth/invalid-email") {
+                alert("The email address is not valid.");
+                
+            } else if (err.code == "auth/operation-not-allowed") {
+                alert("Operation not allowed.");
+            } else if (err.code == "auth/weak-password") {
+                alert("The password is too weak.");
+            }
+        setErr(true)
         setLoading(false);
         }
     };
@@ -62,7 +73,7 @@ const Register = () => {
     return (
         <div className="formContainer">
         <div className="formWrapper">
-            <span className="logo">Lama Chat</span>
+            <span className="logo">Chat</span>
             <span className="title">Register</span>
             <form onSubmit={handleSubmit}>
             <input required type="text" placeholder="display name" />
@@ -75,7 +86,7 @@ const Register = () => {
             </label>
             <button disabled={loading}>Sign up</button>
             {loading && "Uploading and compressing the image please wait..."}
-            {err && <span>Something went wrong</span>}
+            {err && <span>{console.log(err.code)}</span>}
             </form>
             <p>
             You do have an account? <Link to="/register">Login</Link>
